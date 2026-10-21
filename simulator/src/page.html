@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ask Aunova &middot; voice-assistant simulator</title>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0c1118;
+  --panel: #141c26;
+  --panel-2: #192330;
+  --line: #27384a;
+  --ink: #e8eef5;
+  --dim: #8ea3b8;
+  --ok: #7ee2a8;
+  --warn: #ffd479;
+  --stop: #ff9d9d;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font: 15px/1.55 ui-sans-serif, system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+.wrap { max-width: 60rem; margin: 0 auto; padding: 22px 18px 64px; }
+.banner {
+  border: 1px solid #6b4b16;
+  background: #2a1f0c;
+  color: var(--warn);
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 0 0 18px;
+  font-size: .84rem;
+  line-height: 1.5;
+}
+.banner b { letter-spacing: .08em; text-transform: uppercase; }
+h1 { font-size: 1.5rem; margin: 0 0 4px; }
+.tagline { color: var(--dim); margin: 0 0 20px; font-size: .92rem; }
+section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+          padding: 16px 18px; margin: 0 0 16px; }
+h2 { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+     color: var(--dim); margin: 0 0 12px; font-weight: 600; }
+fieldset { border: 0; margin: 0 0 14px; padding: 0; }
+legend { padding: 0; font-size: .78rem; letter-spacing: .12em; text-transform: uppercase;
+         color: var(--dim); margin-bottom: 8px; }
+.roles { display: flex; gap: 8px; flex-wrap: wrap; }
+.roles label { border: 1px solid var(--line); border-radius: 999px; padding: 6px 14px;
+               font-size: .86rem; cursor: pointer; background: var(--panel-2); }
+.roles input { margin-right: 7px; }
+.roles label:has(input:checked) { border-color: #4b7fd1; background: #17263c; }
+textarea {
+  width: 100%; min-height: 4.5rem; resize: vertical; padding: 11px 13px;
+  border-radius: 10px; border: 1px solid var(--line); background: #0f161f;
+  color: var(--ink); font: inherit;
+}
+.row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 10px; }
+button {
+  border: 1px solid var(--line); background: var(--panel-2); color: var(--ink);
+  border-radius: 9px; padding: 9px 16px; font: inherit; cursor: pointer;
+}
+button.primary { background: #1d3c66; border-color: #2f5f9e; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+button.listening { background: #5a1f1f; border-color: #8c3030; }
+.note { color: var(--dim); font-size: .8rem; margin: 8px 0 0; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.chip { text-align: left; font-size: .82rem; padding: 8px 12px; max-width: 100%; }
+.chip small { display: block; color: var(--dim); margin-top: 3px; font-size: .74rem; }
+.spoken { font-size: 1.06rem; line-height: 1.6; margin: 0 0 14px; }
+.spoken.empty { color: var(--dim); font-size: .92rem; }
+ul.statements { list-style: none; margin: 0; padding: 0; }
+ul.statements li { border-left: 3px solid var(--line); padding: 2px 0 2px 12px; margin: 0 0 12px; }
+ul.statements li.verified { border-left-color: var(--ok); }
+ul.statements li.unverified { border-left-color: var(--warn); }
+ul.statements li.contradicted { border-left-color: var(--stop); }
+ul.statements li.refused { border-left-color: var(--stop); }
+.tag { font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--dim); }
+.cites { font-family: var(--mono); font-size: .76rem; color: var(--dim); margin-top: 4px; }
+.withheld { border: 1px dashed #6b4b16; border-radius: 9px; padding: 10px 12px; margin-top: 12px;
+            font-size: .84rem; color: var(--warn); }
+details { border: 1px solid var(--line); border-radius: 10px; background: var(--panel-2);
+          padding: 10px 12px; margin: 0 0 10px; }
+summary { cursor: pointer; font-size: .88rem; }
+summary .tool { font-family: var(--mono); }
+pre { background: #0b1118; border: 1px solid var(--line); border-radius: 8px; padding: 10px;
+      overflow-x: auto; font-family: var(--mono); font-size: .75rem; margin: 10px 0 0; }
+.cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr)); }
+.cards iframe { width: 100%; height: 19rem; border: 1px solid var(--line); border-radius: 10px;
+                background: #10151c; }
+.error { border: 1px solid #8c3030; background: #2a1414; color: var(--stop);
+         border-radius: 9px; padding: 11px 13px; font-size: .88rem; }
+footer { color: var(--dim); font-size: .76rem; line-height: 1.6; }
+footer code { font-family: var(--mono); }
+.toggle { font-size: .84rem; color: var(--dim); display: inline-flex; align-items: center; gap: 7px; }
+.heard { font-size: 1.02rem; line-height: 1.6; margin: 0 0 10px; }
+ul.alternatives { list-style: none; margin: 0 0 10px; padding: 0; }
+ul.alternatives li { border-left: 3px solid var(--line); padding: 2px 0 2px 12px; margin: 0 0 8px;
+                     font-size: .9rem; color: var(--dim); }
+.hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<p class="banner">
+  <b>Simulator</b> &mdash; this is a web page acting as a real MCP client, not a voice-assistant
+  device and not any vendor&rsquo;s assistant. Every answer below is composed only from what the
+  MCP server returned. All project data is synthetic demonstration data for a fictional project;
+  no real project, regulator or authority is involved, named or implied, and nothing here is
+  approved or endorsed by anyone.
+</p>
+
+<h1>Ask Aunova</h1>
+<p class="tagline">
+  Ask a building project a question and get an answer that proves itself. The role comes from the
+  bearer token, server-side &mdash; this page sends no role and cannot filter anything.
+</p>
+
+<section>
+  <h2>Ask</h2>
+  <fieldset>
+    <legend>Identity (swaps the bearer token, nothing else)</legend>
+    <div class="roles" id="roles"></div>
+  </fieldset>
+  <label class="hidden" for="question">Question</label>
+  <textarea id="question" placeholder="Type a question, or pick one below."></textarea>
+  <div class="row">
+    <button class="primary" id="ask" type="button">Ask</button>
+    <button id="talk" type="button">Push to talk</button>
+    <span class="note" id="talk-note"></span>
+  </div>
+  <div class="row">
+    <label class="toggle">
+      <input type="checkbox" id="capture-toggle">
+      Record here and let this simulator transcribe it
+    </label>
+    <span class="note" id="capture-note"></span>
+  </div>
+  <div class="chips" id="chips"></div>
+</section>
+
+<section id="heard-section" class="hidden">
+  <h2>What was heard &mdash; nothing is asked until you confirm it</h2>
+  <p class="heard" id="heard"></p>
+  <ul class="alternatives" id="alternatives"></ul>
+  <p class="note" id="heard-note"></p>
+  <p class="note" id="taken-as"></p>
+  <div class="row" id="choices"></div>
+  <div class="row">
+    <button class="primary" id="confirm" type="button">Ask this</button>
+    <button id="discard" type="button">Discard</button>
+  </div>
+</section>
+
+<section id="answer-section" class="hidden">
+  <h2>Answer</h2>
+  <p class="spoken" id="spoken"></p>
+  <ul class="statements" id="statements"></ul>
+  <div id="withheld"></div>
+  <p class="note" id="speech-note"></p>
+</section>
+
+<section id="error-section" class="hidden">
+  <h2>Nothing was answered</h2>
+  <p class="error" id="error"></p>
+</section>
+
+<section id="cards-section" class="hidden">
+  <h2>Evidence cards (read over MCP as <code>resources/read</code>)</h2>
+  <div class="cards" id="cards"></div>
+</section>
+
+<section id="drawer-section" class="hidden">
+  <h2>Debug drawer &mdash; every MCP call this answer made</h2>
+  <p class="note" id="handshake"></p>
+  <div id="calls"></div>
+  <details>
+    <summary>System prompt the loop works under</summary>
+    <pre id="system-prompt"></pre>
+  </details>
+</section>
+
+<footer>
+  <p id="about"></p>
+  <p id="hosted-note"></p>
+  <p>
+    <b>Where what you say goes.</b> On a default build nothing you type leaves this machine: the
+    browser talks only to this simulator, and the simulator is the MCP client and talks only to
+    the MCP server, over Streamable HTTP on loopback. Started against a hosted model or a hosted
+    voice that stops being the whole truth, which is why the line above names every hosted
+    service actually in use rather than leaving you to assume. <b>Push-to-talk is separate
+    again.</b> On the browser path your audio is sent to that browser&rsquo;s own speech service
+    &mdash; in Chrome, that is Google &mdash; and never reaches this simulator. On the other path
+    your audio is posted here as 16&nbsp;kHz mono PCM, and what happens to it next depends on
+    how this simulator was started &mdash; <span id="recording-destination"></span> Sending a
+    recording of a voice takes its own switch, <code>--live-transcribe</code>, which nobody can
+    turn on by accident, and which is not implied by running the model or the voice live. The
+    note beside the push-to-talk button says which path is active, before you press it.
+  </p>
+  <p>
+    Both voice paths are read by the same normaliser and both stop at the same confirmation, so
+    nothing is asked of the server until you have seen what was heard. Typing is the path
+    everything is tested on, and it always works.
+  </p>
+</footer>
+
+</div>
+<script>
+"use strict";
+
+const state = {
+  identity: "buyer",
+  busy: false,
+  // "browser" is this browser's own speech recogniser; "simulator" records
+  // audio here and posts it to be transcribed. Both end at the same
+  // confirmation, and neither asks anything on its own.
+  capture: "browser",
+  recogniser: null,
+  // Whether the simulator's own transcriber would actually transcribe a
+  // recording, or is the fixture stub. Push-to-talk only falls back to that
+  // path when this is true: a fallback to something that cannot answer is
+  // not a fallback. Set from /api/about at start-up, and `null` — not
+  // `false` — until then, because "nowhere" and "not known yet" are
+  // different things to tell somebody about their own voice.
+  liveTranscriber: null,
+  // Trailing advice appended to the capture note, kept so that re-saying
+  // where audio goes does not drop the sentence after it.
+  captureSuffix: "",
+  listening: false,
+  recording: null
+};
+
+// The one capture format: 16 kHz mono signed 16-bit little-endian PCM, which
+// is what a streaming speech service takes as it stands. Capturing it here
+// means no container and no codec anywhere between this page and the service.
+const TARGET_RATE = 16000;
+const MAX_SECONDS = 20;
+
+// The worklet that hands the samples over, as a module this page serves to
+// itself. It is a few lines and it is here rather than in a file so that the
+// page remains one asset that fetches nothing.
+const WORKLET_SOURCE = `
+class PcmCapture extends AudioWorkletProcessor {
+  process(inputs) {
+    const channel = inputs[0] && inputs[0][0];
+    if (channel && channel.length > 0) { this.port.postMessage(channel.slice(0)); }
+    return true;
+  }
+}
+registerProcessor("pcm-capture", PcmCapture);
+`;
+const el = (id) => document.getElementById(id);
+
+function clear(node) {
+  while (node.firstChild) { node.removeChild(node.firstChild); }
+}
+
+function show(id, visible) {
+  el(id).classList.toggle("hidden", !visible);
+}
+
+async function readJson(response) {
+  const body = await response.json().catch(() => null);
+  if (body === null) {
+    throw new Error("the simulator answered with something that is not JSON");
+  }
+  if (!response.ok) {
+    throw new Error(body.error || ("the simulator answered " + response.status));
+  }
+  return body;
+}
+
+function renderIdentities(identities) {
+  const roles = el("roles");
+  clear(roles);
+  for (const identity of identities) {
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = "identity";
+    input.value = identity.key;
+    input.checked = identity.key === state.identity;
+    input.addEventListener("change", () => { state.identity = identity.key; });
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(identity.label));
+    roles.appendChild(label);
+  }
+}
+
+function renderChips(questions) {
+  const chips = el("chips");
+  clear(chips);
+  for (const scripted of questions) {
+    const chip = document.createElement("button");
+    chip.type = "button";
+    chip.className = "chip";
+    chip.appendChild(document.createTextNode(scripted.question));
+    const shows = document.createElement("small");
+    shows.textContent = scripted.shows;
+    chip.appendChild(shows);
+    chip.addEventListener("click", () => {
+      el("question").value = scripted.question;
+      ask();
+    });
+    chips.appendChild(chip);
+  }
+}
+
+function renderAnswer(turn) {
+  const answer = turn.answer;
+  const spoken = el("spoken");
+  spoken.classList.toggle("empty", answer.spoken === "");
+  spoken.textContent = answer.spoken !== ""
+    ? answer.spoken
+    : "Nothing was said: no sentence in the tool results survived the loop's checks.";
+
+  const list = el("statements");
+  clear(list);
+  for (const statement of answer.statements) {
+    const item = document.createElement("li");
+    item.className = statement.standing;
+    const tag = document.createElement("div");
+    tag.className = "tag";
+    tag.textContent = statement.standing + " \u00b7 call " + statement.from_call
+      + " \u00b7 " + statement.tool;
+    const text = document.createElement("div");
+    text.textContent = statement.said;
+    item.appendChild(tag);
+    item.appendChild(text);
+    if (statement.citations.length > 0) {
+      const cites = document.createElement("div");
+      cites.className = "cites";
+      cites.textContent = statement.citations.join(", ");
+      item.appendChild(cites);
+    }
+    list.appendChild(item);
+  }
+
+  const withheld = el("withheld");
+  clear(withheld);
+  for (const held of answer.withheld) {
+    const box = document.createElement("div");
+    box.className = "withheld";
+    box.textContent = "Withheld: \u201c" + held.text + "\u201d \u2014 " + held.reason;
+    withheld.appendChild(box);
+  }
+
+  el("speech-note").textContent = turn.speech.note;
+  show("answer-section", true);
+}
+
+function renderCalls(turn) {
+  el("handshake").textContent =
+    "initialize \u2192 " + turn.server.name + " " + turn.server.version
+    + " (MCP " + turn.server.protocol_version + ") \u00b7 tools/list \u2192 "
+    + turn.tools_advertised.join(", ");
+
+  const calls = el("calls");
+  clear(calls);
+  for (const call of turn.calls) {
+    const box = document.createElement("details");
+    const summary = document.createElement("summary");
+    summary.textContent = "tools/call " + call.index + " \u00b7 ";
+    const tool = document.createElement("span");
+    tool.className = "tool";
+    tool.textContent = call.tool;
+    summary.appendChild(tool);
+    if (call.refused) {
+      summary.appendChild(document.createTextNode(" \u00b7 refused by the server"));
+    }
+    box.appendChild(summary);
+    const args = document.createElement("pre");
+    args.textContent = "arguments " + JSON.stringify(call.arguments, null, 2);
+    const result = document.createElement("pre");
+    result.textContent = "result " + JSON.stringify(call.result, null, 2);
+    box.appendChild(args);
+    box.appendChild(result);
+    calls.appendChild(box);
+  }
+  el("system-prompt").textContent = turn.system_prompt;
+  show("drawer-section", true);
+}
+
+async function renderCards(turn) {
+  const cards = el("cards");
+  clear(cards);
+  show("cards-section", turn.answer.citations.length > 0);
+  for (const docId of turn.answer.citations) {
+    const frame = document.createElement("iframe");
+    frame.setAttribute("sandbox", "");
+    frame.title = "Evidence card " + docId;
+    cards.appendChild(frame);
+    try {
+      const url = "/api/evidence/" + encodeURIComponent(state.identity)
+        + "/" + encodeURIComponent(docId);
+      const card = await readJson(await fetch(url));
+      frame.srcdoc = card.html;
+    } catch (failure) {
+      const problem = document.createElement("p");
+      problem.className = "error";
+      problem.textContent = docId + ": " + failure.message;
+      cards.replaceChild(problem, frame);
+    }
+  }
+}
+
+function renderError(message) {
+  el("error").textContent = message;
+  show("error-section", true);
+}
+
+async function ask() {
+  if (state.busy) { return; }
+  const question = el("question").value.trim();
+  if (question === "") { return; }
+  state.busy = true;
+  el("ask").disabled = true;
+  show("answer-section", false);
+  show("error-section", false);
+  show("cards-section", false);
+  show("drawer-section", false);
+  show("heard-section", false);
+  try {
+    const turn = await readJson(await fetch("/api/ask", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ identity: state.identity, question: question })
+    }));
+    renderAnswer(turn);
+    renderCalls(turn);
+    await renderCards(turn);
+  } catch (failure) {
+    renderError(failure.message);
+  } finally {
+    state.busy = false;
+    el("ask").disabled = false;
+  }
+}
+
+function startTalking(label) {
+  const button = el("talk");
+  button.classList.add("listening");
+  button.textContent = label + " \u2014 click to stop";
+}
+
+function stopTalking() {
+  state.listening = false;
+  const button = el("talk");
+  button.classList.remove("listening");
+  button.textContent = "Push to talk";
+}
+
+function captureNote(text) {
+  el("capture-note").textContent = text;
+}
+
+// Where the audio of the active path actually goes. Said before the button
+// is pressed, not after: "loopback only" is true of typing and not of voice,
+// and somebody recording their voice is entitled to know which of the two
+// they are doing.
+function captureDestination(path) {
+  if (path !== "simulator") {
+    return "Using this browser's own speech recogniser, which sends your audio to the browser's "
+      + "own speech service \u2014 in Chrome, that is Google. It does not come to this simulator.";
+  }
+  // Said from the server's own flag, not from which switches a reader might
+  // assume were passed. "Sends it nowhere" stops being true the moment
+  // --live-transcribe is on, and this is the sentence somebody reads right
+  // before they hold the button down.
+  //
+  // Three states, not two. Until /api/about answers — and if it never does —
+  // this page does not know where a recording would go, and saying "nowhere"
+  // would be a guess in the reassuring direction. An unanswered question
+  // about somebody's voice is reported as unanswered.
+  if (state.liveTranscriber === null) {
+    return "Recording here and posting the audio to this simulator as 16 kHz mono PCM. This "
+      + "page has not been able to ask the simulator what happens to it next, so where your "
+      + "audio goes is unknown; type the question instead if that matters to you.";
+  }
+  return state.liveTranscriber
+    ? "Recording here and posting the audio to this simulator as 16 kHz mono PCM. This build is "
+      + "running live: your audio IS sent to Amazon Transcribe to be transcribed."
+    : "Recording here and posting the audio to this simulator as 16 kHz mono PCM. This build "
+      + "transcribes it on this machine with a stub and sends it nowhere; only with "
+      + "--live-transcribe would your audio be sent to Amazon Transcribe.";
+}
+
+// Re-say where audio goes, from whatever is known now.
+//
+// `setUpPushToTalk` runs before `/api/about` has answered, so the first note
+// is written while `state.liveTranscriber` is still its cautious default.
+// Calling this again once the flags arrive is what stops the page telling
+// somebody their audio goes nowhere in a build where it goes to Amazon.
+function refreshCaptureNote() {
+  captureNote(captureDestination(state.capture) + (state.captureSuffix || ""));
+  // The footer's own sentence about the recording path, from the same flag.
+  // It used to be static text saying the audio went nowhere, which was false
+  // in exactly the build where it mattered.
+  el("recording-destination").textContent = state.liveTranscriber === null
+    ? "this page has not been able to ask the simulator, so where it goes is unknown."
+    : state.liveTranscriber
+      ? "this build sends it to Amazon Transcribe to be transcribed."
+      : "this build transcribes it on this machine with a stub and sends it nowhere.";
+}
+
+// Everything heard, whichever path heard it, is shown here first. Nothing on
+// this page reaches a tool call without the person having seen what was heard
+// and what it was taken to mean.
+function showHeard(alternatives, pathNote, interpretation) {
+  el("heard").textContent = alternatives.length > 0
+    ? "\u201c" + alternatives[0] + "\u201d"
+    : "Nothing was heard.";
+
+  const list = el("alternatives");
+  clear(list);
+  for (const alternative of alternatives.slice(1)) {
+    const item = document.createElement("li");
+    item.textContent = "also heard: \u201c" + alternative + "\u201d";
+    list.appendChild(item);
+  }
+
+  el("heard-note").textContent = pathNote;
+  el("taken-as").textContent = interpretation.note;
+
+  const choices = el("choices");
+  clear(choices);
+  if (interpretation.choices.length > 1) {
+    // More than one reading: they are offered, not ranked. Picking one is
+    // the person's act, and the question only changes when they pick.
+    for (const choice of interpretation.choices) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = "Ask about " + choice.label;
+      button.addEventListener("click", () => {
+        el("question").value = choice.question;
+        el("confirm").disabled = false;
+        el("taken-as").textContent = "You chose " + choice.label
+          + ". Press \u201cAsk this\u201d to put that question to the server.";
+      });
+      choices.appendChild(button);
+    }
+  }
+
+  if (interpretation.question !== null) {
+    el("question").value = interpretation.question;
+    el("confirm").disabled = false;
+  } else {
+    // Fail closed: nothing resolved, so there is nothing to confirm in one
+    // press. What was heard goes in the box to be read and corrected.
+    el("question").value = alternatives.length > 0 ? alternatives[0] : "";
+    el("confirm").disabled = true;
+  }
+  show("answer-section", false);
+  show("error-section", false);
+  show("heard-section", true);
+}
+
+// One normaliser, on this simulator, for both capture paths: a second copy
+// of it in this page would be a second thing to keep right.
+async function interpretHeard(alternatives, pathNote) {
+  try {
+    const interpretation = await readJson(await fetch("/api/interpret", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ heard: alternatives })
+    }));
+    showHeard(interpretation.heard, pathNote, interpretation);
+  } catch (failure) {
+    renderError(failure.message);
+  }
+}
+
+async function transcribeHere(pcm) {
+  try {
+    const heard = await readJson(await fetch("/api/transcribe", {
+      method: "POST",
+      headers: { "content-type": "application/octet-stream" },
+      body: pcm
+    }));
+    showHeard(heard.interpretation.heard, heard.note, heard.interpretation);
+  } catch (failure) {
+    renderError(failure.message);
+  }
+}
+
+function buildRecogniser(Recogniser) {
+  const recogniser = new Recogniser();
+  recogniser.lang = "en-GB";
+  recogniser.interimResults = false;
+  recogniser.maxAlternatives = 5;
+  recogniser.addEventListener("result", (event) => {
+    // Every alternative, not only the best one: which unit was said is not
+    // the recogniser's to rank, and alternatives that disagree are an
+    // ambiguity for the person to settle.
+    const result = event.results[0];
+    const alternatives = [];
+    for (let index = 0; index < result.length; index += 1) {
+      const heard = result[index].transcript.trim();
+      if (heard !== "" && alternatives.indexOf(heard) === -1) { alternatives.push(heard); }
+    }
+    interpretHeard(alternatives, "Heard by this browser's own speech recogniser, which offered "
+      + alternatives.length + " reading(s) of it.");
+  });
+  recogniser.addEventListener("error", (event) => {
+    // Two separate questions, and conflating them is what broke this: is the
+    // recogniser finished, and is there anywhere else to go?
+    //
+    // "no-speech" and "aborted" are not failures of the recogniser, they are
+    // a press that caught nothing. Switching path on those strands somebody
+    // who simply paused, and switches it silently from under them.
+    if (event.error === "no-speech" || event.error === "aborted") {
+      captureNote("That press caught nothing — the recogniser heard no speech. Press and hold "
+        + "again, or type the question.");
+      stopTalking();
+      return;
+    }
+
+    // Loudly, never silently: somebody who thinks they are on one path while
+    // they are on another cannot judge what they are looking at. But only
+    // switch to a path that can actually answer: with the fixture stub the
+    // other path transcribes nothing, so falling back to it would replace a
+    // broken button with a differently broken one.
+    // Three cases, because "the other path cannot answer" and "nobody knows
+    // whether it can" are different things to tell somebody, and only one of
+    // them is a reason to say there is nowhere to go.
+    if (state.liveTranscriber) {
+      state.capture = "simulator";
+      el("capture-toggle").checked = true;
+      captureNote("This browser's speech recogniser stopped: " + event.error
+        + ". Push-to-talk has switched to recording audio here and sending it to this simulator "
+        + "to be transcribed. Press it again to record.");
+    } else if (state.liveTranscriber === null) {
+      captureNote("This browser's speech recogniser stopped: " + event.error
+        + ". This page could not ask the simulator where recorded audio would go, so it has not "
+        + "switched anything — type the question, or try again.");
+    } else {
+      captureNote("This browser's speech recogniser stopped: " + event.error
+        + ". This build transcribes only its own fixture recordings, so there is nowhere to "
+        + "switch to — type the question instead.");
+    }
+    stopTalking();
+  });
+  recogniser.addEventListener("end", stopTalking);
+  return recogniser;
+}
+
+async function startRecording() {
+  if (!navigator.mediaDevices || !window.AudioContext || !window.AudioWorkletNode) {
+    captureNote("This browser cannot record audio here. Type the question instead.");
+    return;
+  }
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: { channelCount: 1 } });
+    const context = new AudioContext({ sampleRate: TARGET_RATE });
+    const module = URL.createObjectURL(new Blob([WORKLET_SOURCE], { type: "text/javascript" }));
+    try {
+      await context.audioWorklet.addModule(module);
+    } finally {
+      URL.revokeObjectURL(module);
+    }
+    const input = context.createMediaStreamSource(stream);
+    const capture = new AudioWorkletNode(context, "pcm-capture");
+    // The graph is pulled from the destination, so the worklet has to reach
+    // it. A gain of zero means nothing is played back while it does.
+    const silent = context.createGain();
+    silent.gain.value = 0;
+    const recording = { stream: stream, context: context, input: input, capture: capture,
+                        silent: silent, chunks: [], frames: 0 };
+    capture.port.onmessage = (event) => {
+      if (recording.frames >= context.sampleRate * MAX_SECONDS) { stopRecording(); return; }
+      recording.chunks.push(event.data);
+      recording.frames += event.data.length;
+    };
+    input.connect(capture);
+    capture.connect(silent);
+    silent.connect(context.destination);
+    state.recording = recording;
+    startTalking("Recording");
+  } catch (failure) {
+    stopTalking();
+    captureNote("The microphone was not available: " + (failure.name || failure.message)
+      + ". Type the question instead.");
+  }
+}
+
+function stopRecording() {
+  const recording = state.recording;
+  if (recording === null) { return; }
+  state.recording = null;
+  stopTalking();
+  recording.capture.port.onmessage = null;
+  recording.input.disconnect();
+  recording.capture.disconnect();
+  recording.silent.disconnect();
+  for (const track of recording.stream.getTracks()) { track.stop(); }
+  const rate = recording.context.sampleRate;
+  recording.context.close();
+  const pcm = toPcm16(recording.chunks, rate);
+  if (pcm.byteLength === 0) {
+    captureNote("Nothing was recorded. Press push to talk and speak, or type the question.");
+    return;
+  }
+  transcribeHere(pcm);
+}
+
+// Float samples at whatever rate the device gave us, to signed 16-bit
+// little-endian at 16 kHz. Linear interpolation, so a device that cannot
+// open an input at 16 kHz is resampled here rather than sending a rate the
+// transcriber was not told about.
+function toPcm16(chunks, rate) {
+  let total = 0;
+  for (const chunk of chunks) { total += chunk.length; }
+  const samples = new Float32Array(total);
+  let at = 0;
+  for (const chunk of chunks) { samples.set(chunk, at); at += chunk.length; }
+
+  const ratio = rate / TARGET_RATE;
+  const count = total === 0 ? 0 : Math.floor(total / ratio);
+  const pcm = new DataView(new ArrayBuffer(count * 2));
+  for (let index = 0; index < count; index += 1) {
+    const position = index * ratio;
+    const left = Math.floor(position);
+    const right = Math.min(left + 1, total - 1);
+    const value = samples[left] + (samples[right] - samples[left]) * (position - left);
+    const clamped = Math.max(-1, Math.min(1, value));
+    pcm.setInt16(index * 2, Math.round(clamped * 32767), true);
+  }
+  return pcm.buffer;
+}
+
+function talk() {
+  if (state.recording !== null) { stopRecording(); return; }
+  if (state.listening) { state.recogniser.stop(); return; }
+  if (state.capture === "browser" && state.recogniser !== null) {
+    state.listening = true;
+    startTalking("Listening");
+    state.recogniser.start();
+    return;
+  }
+  startRecording();
+}
+
+function setUpPushToTalk() {
+  const toggle = el("capture-toggle");
+  const Recogniser = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!Recogniser) {
+    // No recogniser here, so the recording path is the only voice path.
+    // Push-to-talk still works, and so does typing.
+    state.capture = "simulator";
+    toggle.checked = true;
+    toggle.disabled = true;
+    el("talk-note").textContent = "This browser exposes no speech recogniser.";
+    state.captureSuffix = " Type the question instead if you prefer.";
+    refreshCaptureNote();
+  } else {
+    state.recogniser = buildRecogniser(Recogniser);
+    el("talk-note").textContent = "Push to talk, then confirm what was heard.";
+    state.captureSuffix =
+      " Tick the box to record audio here and have this simulator transcribe it instead.";
+    refreshCaptureNote();
+  }
+  toggle.addEventListener("change", () => {
+    state.capture = toggle.checked ? "simulator" : "browser";
+    state.captureSuffix = "";
+    refreshCaptureNote();
+  });
+  el("talk").addEventListener("click", talk);
+  el("confirm").addEventListener("click", () => { show("heard-section", false); ask(); });
+  el("discard").addEventListener("click", () => {
+    show("heard-section", false);
+    el("question").value = "";
+  });
+}
+
+// Which hosted services this build actually uses, named one by one.
+//
+// Built from the server's own flags rather than from the names beside them:
+// those are sentences written for a person, and a page that pattern-matches
+// prose to decide what it tells you about your own data is one rewording
+// away from being wrong about it.
+function hostedNote(about) {
+  const sends = [];
+  if (about.model_is_live === true) {
+    sends.push("your question and the tool results go to " + about.model);
+  }
+  if (about.voice_is_live === true) {
+    sends.push("the finished answer goes to " + about.voice + " to be spoken aloud");
+  }
+  if (about.transcriber_is_live === true) {
+    sends.push("push-to-talk audio recorded here goes to " + about.transcriber);
+  }
+  return sends.length === 0
+    ? "Running on stubs: nothing on this page is sent to any hosted service."
+    : "Running live \u2014 " + sends.join("; ") + ".";
+}
+
+async function start() {
+  el("ask").addEventListener("click", ask);
+  el("question").addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && (event.ctrlKey || event.metaKey)) { ask(); }
+  });
+  setUpPushToTalk();
+  try {
+    const about = await readJson(await fetch("/api/about"));
+    state.identity = about.identities[0].key;
+    state.liveTranscriber = about.transcriber_is_live === true;
+    // The first note was written before this was known. Say it again.
+    refreshCaptureNote();
+    renderIdentities(about.identities);
+    renderChips(about.scripted_questions);
+    el("about").textContent = about.client + " \u2192 MCP endpoint " + about.endpoint
+      + " \u00b7 model: " + about.model + " \u00b7 voice: " + about.voice
+      + " \u00b7 transcriber: " + about.transcriber;
+    el("hosted-note").textContent = hostedNote(about);
+  } catch (failure) {
+    renderError(failure.message);
+  }
+}
+
+start();
+</script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+[package]
+name = "verify-dataset"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+# The dataset schema, canonical signing payload, hashing and key handling.
+# Shared with sign-dataset so the two cannot drift apart.
+dataset-manifest = { path = "../dataset-manifest" }
+# Argument parsing, derive form. default-features off drops "color" (7 crates
+# of terminal styling) and "suggestions" (strsim); this binary's output is
+# plain text. "help", "usage" and "error-context" are kept because they are
+# what makes a wrong invocation say what was wrong.
+clap = { version = "4.6.7", default-features = false, features = [
+    "std",
+    "derive",
+    "help",
+    "usage",
+    "error-context",
+] }

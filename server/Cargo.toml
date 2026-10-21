@@ -1,0 +1,61 @@
+[package]
+name = "ask-aunova-server"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+# The MCP server itself: the protocol model, the `ServerHandler` trait and the
+# Streamable HTTP server transport. rmcp 3.5.1's default features are exactly
+# `base64`, `macros` and `server` (.qa/vendor/rmcp-3.5.1/Cargo.toml). Turning
+# them off and naming two drops exactly one of those three — `macros`, with
+# its `rmcp-macros` and `pastey` dependencies, which this crate does not need
+# because the six tools are declared by hand. `base64` comes back anyway, as a
+# transitive requirement of `transport-streamable-http-server` →
+# `server-side-http`. The MCP client, the OAuth stack and the reqwest TLS
+# backends are not defaults at all: they are optional features this build
+# never names.
+rmcp = { version = "3.5.1", default-features = false, features = [
+    "server",
+    "transport-streamable-http-server",
+] }
+# HTTP server hosting the MCP transport on /mcp, and the layer that resolves a
+# bearer token to a role in front of it. No TLS and no websockets: this server
+# binds loopback and speaks plain HTTP.
+axum = { version = "0.8", default-features = false, features = ["http1", "tokio"] }
+# Async runtime required by rmcp's transport and by `axum::serve`, and the
+# blocking pool (`spawn_blocking`) the per-request verification run is
+# dispatched to so filesystem work never sits inside the reactor.
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net"] }
+# Tool input schemas, and every answer body: the tools return structured JSON.
+serde_json = "1"
+# Deriving the project-record types in `src/record.rs`. The signing crate keeps
+# only the fields it signs over, so the server parses the rest itself.
+serde = { version = "1.0.229", features = ["derive"] }
+# Typed startup failures that name the port or address that failed, and the
+# refusal reasons in `src/verify.rs`.
+thiserror = "2"
+# rmcp logs through `tracing`; the startup line and rejected requests join it.
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", default-features = false, features = ["fmt"] }
+# The signing core this repo already ships: `verify_dataset` recomputes every
+# hash and checks every signature against the committed issuer keys. A path
+# dependency on a sibling in this workspace, not a third-party crate.
+dataset-manifest = { version = "0.1.0", path = "../tools/dataset-manifest" }
+# Lowercase hex for the `whats_changed` cursor body. Already in this
+# workspace's lock through dataset-manifest, which hex-codes every hash, key
+# and signature with it; naming it here adds no package to the supply chain
+# and removes a hand-rolled codec. "std" only, as the signing crate pins it.
+hex = { version = "0.4.3", default-features = false, features = ["std"] }
+
+[dev-dependencies]
+# Drives the integration tests over a real loopback socket, the same way
+# scripts/smoke.sh drives the binary. No TLS features: plain HTTP to 127.0.0.1.
+reqwest = { version = "0.13", default-features = false }
+# The signing core, for tests that edit a fixture's record and must re-sign
+# it before the server will verify it. Already a dependency of the library
+# above; an integration test links the test binary, not the library's
+# dependency graph, so it has to be named here too.
+dataset-manifest = { version = "0.1.0", path = "../tools/dataset-manifest" }

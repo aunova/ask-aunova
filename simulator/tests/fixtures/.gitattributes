@@ -1,0 +1,8 @@
+# These recordings are compared byte for byte against the generator in
+# `transcribe::fixture_pcm`, so every byte of them must survive a checkout
+# unchanged. `-text` tells git to do no end-of-line conversion in either
+# direction, as `data/**` does for the signed dataset: a platform that
+# rewrites line endings (Git for Windows defaults to core.autocrlf=true)
+# would otherwise turn a sample that happens to be 0x0D 0x0A into a fixture
+# the stub transcriber no longer recognises.
+*.pcm -text

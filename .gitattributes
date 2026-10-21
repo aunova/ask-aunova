@@ -1,0 +1,7 @@
+# The dataset is content-hashed and Ed25519-signed, so every byte of it must
+# survive a checkout unchanged. Without this, a platform that rewrites line
+# endings on checkout (Git for Windows defaults to core.autocrlf=true) turns
+# every document into a hash mismatch and `verify-dataset` fails the whole set.
+# `-text` tells git to do no end-of-line conversion in either direction.
+data/** -text
+keys/public/*.json -text

@@ -1,0 +1,34 @@
+[package]
+name = "dataset-manifest"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+# Typed deserialisation of project.json, manifest.json and issuers.json.
+# "derive" because every schema here is a plain struct.
+serde = { version = "1.0.229", features = ["derive"] }
+# The JSON reader, and the deterministic pretty-printer the manifest is
+# written with.
+serde_json = "1.0.154"
+# sha256 over each document's exact bytes. default-features off drops "oid"
+# (which pulls const-oid, for X.509 algorithm identifiers) and "alloc";
+# neither is used by a streaming hash.
+sha2 = { version = "0.11.1", default-features = false }
+# Ed25519 signing and verification. Default features are exactly the two we
+# want: "fast" (precomputed tables) and "zeroize" (SigningKey wipes its secret
+# on drop). Everything optional stays off — no serde, pkcs8/pem, batch,
+# rand_core, hazmat or legacy_compatibility.
+ed25519-dalek = "3.0.0"
+# Lowercase hex for hashes, public keys and signatures. "std" only; the serde
+# feature is off because nothing here hex-codes through serde.
+hex = { version = "0.4.3", default-features = false, features = ["std"] }
+# 32 bytes of operating-system entropy for a new issuer keypair. No features:
+# "sys_rng" only adds a rand_core adapter this crate does not use.
+getrandom = "0.4.3"
+# Typed error enum at the library boundary; the binaries print its Display.
+thiserror = "2.0.21"
+# Wipes the private-key seed and its hex text from memory after use.
+zeroize = "1.9.1"

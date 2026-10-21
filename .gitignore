@@ -1,0 +1,9 @@
+target/
+node_modules/
+.env
+*.pem
+# Issuer private keys for the synthetic dataset. Never committed: the manifest
+# plus the public keys in keys/public/ are enough to verify the dataset.
+keys/private/
+# Scratch space for builds and QA runs (TMPDIR points here).
+.qa/

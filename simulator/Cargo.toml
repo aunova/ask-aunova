@@ -1,0 +1,141 @@
+[package]
+name = "ask-aunova-simulator"
+version = "0.1.0"
+edition = "2024"
+license = "Apache-2.0"
+repository = "https://github.com/aunova/ask-aunova"
+publish = false
+description = "A voice-assistant simulator that is a real MCP client over Streamable HTTP."
+
+[dependencies]
+# The MCP *client*: the `initialize` handshake, `tools/list`, `tools/call` and
+# `resources/read`, over the Streamable HTTP client transport. Default features
+# are off because they are the server side (`server`, `macros`, `base64`); the
+# two named here are `client` (the client service and `ClientHandler`) and the
+# reqwest-backed Streamable HTTP client transport, which is what actually
+# speaks HTTP to the MCP server. Naming
+# `transport-streamable-http-client-reqwest` rather than `reqwest` enables
+# reqwest without any TLS backend: this client talks plain HTTP to loopback and
+# refuses any other host, so a TLS stack would be attack surface bought for
+# nothing.
+rmcp = { version = "3.5.1", default-features = false, features = [
+    "client",
+    "transport-streamable-http-client-reqwest",
+] }
+# The HTTP client rmcp's transport runs on, named here so this crate builds it
+# itself instead of taking the default one. The whole reason is `no_proxy()`:
+# reqwest reads `HTTP_PROXY` and `HTTPS_PROXY` from the environment by
+# default, and every request this client makes carries a bearer token, so a
+# proxy variable set anywhere in the environment would route credentials
+# through a third party. A client that speaks only to loopback has no
+# legitimate proxy case. No features are named: rmcp already enables the two
+# it needs (`json`, `stream`) with no TLS backend, and adding one here would
+# put a TLS stack back in the tree.
+reqwest = { version = "0.13", default-features = false }
+# The one loopback HTTP server this binary runs: the simulator page and the
+# small JSON API the page calls. `json` is the only extractor feature: the
+# evidence card is addressed by path (`/api/evidence/<identity>/<doc_id>`),
+# which `Path` reads without the `query` feature, and dropping `query` drops
+# `serde_urlencoded` and `ryu` from the tree with it. No TLS, no websockets,
+# no HTTP/2.
+axum = { version = "0.8", default-features = false, features = [
+    "http1",
+    "tokio",
+    "json",
+] }
+# Async runtime: required by rmcp's client transport and by `axum::serve`.
+# `time` is this crate's own: every MCP request runs under a deadline, so a
+# server that stops answering is a failed question rather than a hung page.
+tokio = { version = "1", features = ["rt-multi-thread", "macros", "net", "time"] }
+# Tool arguments, tool results, and the JSON the page is served.
+serde_json = "1"
+# Deriving the request and response bodies of the page's JSON API.
+serde = { version = "1", features = ["derive"] }
+# Typed errors across this crate's module boundaries: every failure names the
+# operation and the endpoint rather than carrying a transport error whose
+# `Display` embeds a request URL.
+thiserror = "2"
+# rmcp's client transport logs through `tracing`; the startup line and each
+# answered question join it, so an operator sees one stream.
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", default-features = false, features = [
+    "fmt",
+] }
+
+# --------------------------------------------------------------------------
+# `live` only. Off by default: nothing below is compiled, linked or called by
+# any test, by the binary, or by any default build.
+# --------------------------------------------------------------------------
+# The streaming speech-to-text client, for `StartStreamTranscription` and
+# nothing else. Default features are off because they are
+# `["rustls", "default-https-client", "rt-tokio"]` — two separate HTTP client
+# stacks, the modern one on `aws-lc-rs`, which is 367 `unsafe` over a C
+# library whose bindings crate carries 11,240 more and builds through cmake.
+# `rt-tokio` is the one feature kept: the sleep and time implementation, on
+# the runtime this binary already runs. The behaviour version is pinned in
+# code instead of taking `behavior-version-latest`, so an SDK upgrade cannot
+# change how a request is made without somebody editing a line.
+aws-sdk-transcribestreaming = { version = "1.121", default-features = false, features = [
+    "rt-tokio",
+], optional = true }
+# The HTTPS client the SDK is handed, named here for one reason: it chooses
+# the crypto provider. `rustls-ring` instead of the SDK's `rustls-aws-lc` is
+# the same rustls and the same TLS, with 230 `unsafe` in ring in place of
+# 11,607 across aws-lc-rs and aws-lc-sys, and no cmake-driven C build. The
+# crate is in the tree either way; this decides which half of it compiles.
+aws-smithy-http-client = { version = "1.5", default-features = false, features = [
+    "rustls-ring",
+], optional = true }
+# The `Stream` trait, and only the trait: the audio a page recorded is handed
+# to the SDK as a stream of audio events, and this is the definition that
+# makes one. It is already in this tree under reqwest, so naming it adds no
+# package to the lock.
+futures-core = { version = "0.3", default-features = false, optional = true }
+
+aws-config = { version = "1.12.0", default-features = false, features = ["rt-tokio"], optional = true }
+aws-sdk-bedrockruntime = { version = "1.148.0", default-features = false, features = ["rt-tokio"], optional = true }
+aws-sdk-polly = { version = "1.122.0", default-features = false, features = ["rt-tokio"], optional = true }
+base64 = { version = "0.23", optional = true }
+aws-smithy-types = { version = "1.9.0", optional = true }
+# The `ProvideCredentials` trait, so that a test can ask the configured
+# provider for credentials and assert that it refuses. Already in this tree
+# under the SDKs, so naming it adds no package to the lock.
+aws-credential-types = { version = "1.3", optional = true }
+# `EnvConfigFiles` and `EnvConfigFileKind`: the current names for the profile
+# file set. `aws-config` still re-exports them as `ProfileFiles` and
+# `ProfileFileKind`, but those aliases are deprecated and this workspace
+# builds with `-D warnings`. Already in this tree under the SDKs, so naming
+# it adds no package to the lock.
+aws-runtime = { version = "1.10", optional = true }
+
+[features]
+# Everything hosted, in one switch: the model, the voice and the transcriber
+# client. Off by default, and switching it on is still not enough to make a
+# live call — the binary also has to be started with `--live` or
+# `--live-voice`, and the transcriber additionally with `--live-transcribe`.
+# Compile-time switches a reader can grep for; runtime switches the person
+# starting it makes on purpose.
+#
+# There was a narrower `live-transcribe` feature here, and it is gone rather
+# than fixed. It had stopped compiling on its own — the transcriber resolves
+# credentials through `aws::config`, which needs `aws-config`, which only
+# `live` brought in — and at runtime `--live-transcribe` already refuses
+# without `--live`. A feature that cannot build alone and means nothing alone
+# is a second way to say `live` that only exists to rot.
+#
+# `tracing-subscriber/env-filter` is here and not in the default build: it is
+# needed only because the AWS SDK is in the process, and it logs a resolved
+# access key id at INFO. See `init_tracing` in `main.rs`.
+live = [
+    "dep:aws-config",
+    "dep:aws-credential-types",
+    "dep:aws-runtime",
+    "dep:aws-sdk-bedrockruntime",
+    "dep:aws-sdk-polly",
+    "dep:aws-sdk-transcribestreaming",
+    "dep:aws-smithy-http-client",
+    "dep:aws-smithy-types",
+    "dep:base64",
+    "dep:futures-core",
+    "tracing-subscriber/env-filter",
+]

@@ -1,0 +1,326 @@
+{
+  "schema_version": "1.0",
+  "watermark": "SYNTHETIC DEMO DATA",
+  "disclaimer": "Every name, number, certificate, issuer and document in this dataset is invented for a hackathon demonstration. Palm Vista Tower does not exist. The issuers listed below are fictional organisations and are not, and do not represent, any real company, regulator, authority or accreditation body. Nothing here states or implies that any regulator or authority approves, endorses or works with this project.",
+  "project": {
+    "id": "palm-vista",
+    "name": "Palm Vista Tower",
+    "status": "under_construction",
+    "as_of": "2026-10-19",
+    "location": "Marsa Bay Waterfront, Khalij District (fictional)",
+    "storeys_above_ground": 34,
+    "podium_levels": 4,
+    "basement_levels": 3,
+    "units_total": 312,
+    "expected_handover": "2027-08-31",
+    "developer": {
+      "id": "meridian-shoreline-developments",
+      "name": "Meridian Shoreline Developments FZ-LLC",
+      "fictional": true
+    },
+    "main_contractor": {
+      "id": "calder-and-roe-construction",
+      "name": "Calder & Roe Construction LLC",
+      "fictional": true
+    },
+    "consulting_engineer": {
+      "id": "quillfield-consulting-engineers",
+      "name": "Quillfield Consulting Engineers",
+      "fictional": true
+    }
+  },
+  "currency": {
+    "code": "AED",
+    "minor_unit": "fils",
+    "minor_units_per_major": 100,
+    "note": "All amounts in this file are integers in minor units. They are never to be parsed as floating-point numbers."
+  },
+  "issuers": [
+    {
+      "id": "quillfield-consulting-engineers",
+      "name": "Quillfield Consulting Engineers",
+      "role": "Independent consulting engineer; issues site progress and completion records.",
+      "fictional": true
+    },
+    {
+      "id": "cedarline-assurance-bureau",
+      "name": "Cedarline Assurance Bureau",
+      "role": "Fictional third-party structural assurance organisation.",
+      "fictional": true
+    },
+    {
+      "id": "northwind-fire-safety-institute",
+      "name": "Northwind Fire Safety Institute",
+      "role": "Fictional fire and life-safety testing organisation.",
+      "fictional": true
+    },
+    {
+      "id": "verdant-standards-council",
+      "name": "Verdant Standards Council",
+      "role": "Fictional voluntary sustainability rating scheme.",
+      "fictional": true
+    },
+    {
+      "id": "harborstone-escrow-trust",
+      "name": "Harborstone Escrow Trust",
+      "role": "Fictional escrow trustee holding buyer instalments for this project.",
+      "fictional": true
+    },
+    {
+      "id": "lumenfield-testing-laboratories",
+      "name": "Lumenfield Testing Laboratories",
+      "role": "Fictional mechanical, electrical and plumbing commissioning laboratory.",
+      "fictional": true
+    },
+    {
+      "id": "meridian-shoreline-developments",
+      "name": "Meridian Shoreline Developments FZ-LLC",
+      "role": "The project's fictional developer; issues payment schedules and internal notes.",
+      "fictional": true
+    }
+  ],
+  "milestones": [
+    {
+      "id": "MS-01",
+      "title": "Enabling works and shoring complete",
+      "status": "complete",
+      "planned_date": "2025-09-30",
+      "actual_date": "2025-09-22",
+      "percent_of_works": 4,
+      "evidence": ["FC-01"],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-02",
+      "title": "Piling and raft foundation complete",
+      "status": "complete",
+      "planned_date": "2025-12-15",
+      "actual_date": "2025-12-11",
+      "percent_of_works": 11,
+      "evidence": ["FC-01"],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-03",
+      "title": "Basement substructure complete (3 levels)",
+      "status": "complete",
+      "planned_date": "2026-02-28",
+      "actual_date": "2026-03-06",
+      "percent_of_works": 21,
+      "evidence": ["SR-05"],
+      "contractor_note": "CN-14",
+      "visibility": "public"
+    },
+    {
+      "id": "MS-04",
+      "title": "Podium slab and transfer level complete",
+      "status": "complete",
+      "planned_date": "2026-04-30",
+      "actual_date": "2026-04-26",
+      "percent_of_works": 33,
+      "evidence": ["SR-05"],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-05",
+      "title": "Structural frame to level 12",
+      "status": "complete",
+      "planned_date": "2026-06-15",
+      "actual_date": "2026-06-13",
+      "percent_of_works": 46,
+      "evidence": ["SR-05"],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-06",
+      "title": "Structural frame topped out at level 34",
+      "status": "complete",
+      "planned_date": "2026-08-31",
+      "actual_date": "2026-08-27",
+      "percent_of_works": 61,
+      "evidence": ["SR-05", "CERT-STRUCT-2026-114"],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-07",
+      "title": "Facade curtain-wall installation to 60%",
+      "status": "in_progress",
+      "planned_date": "2026-11-30",
+      "actual_date": null,
+      "percent_complete": 48,
+      "percent_of_works": 71,
+      "evidence": ["SR-06"],
+      "contractor_note": "CN-14",
+      "visibility": "public"
+    },
+    {
+      "id": "MS-08",
+      "title": "MEP first fix complete",
+      "status": "in_progress",
+      "planned_date": "2026-12-20",
+      "actual_date": null,
+      "percent_complete": 22,
+      "percent_of_works": 80,
+      "evidence": ["SR-07"],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-09",
+      "title": "Internal fit-out and finishes",
+      "status": "not_started",
+      "planned_date": "2027-04-30",
+      "actual_date": null,
+      "percent_of_works": 93,
+      "evidence": [],
+      "visibility": "public"
+    },
+    {
+      "id": "MS-10",
+      "title": "Commissioning, testing and handover",
+      "status": "not_started",
+      "planned_date": "2027-08-31",
+      "actual_date": null,
+      "percent_of_works": 100,
+      "evidence": ["CERT-MEP-2026-052"],
+      "visibility": "public"
+    }
+  ],
+  "certificates": [
+    {
+      "id": "CERT-STRUCT-2026-114",
+      "title": "Structural integrity verification, superstructure to level 34",
+      "issuer": "cedarline-assurance-bureau",
+      "status": "issued",
+      "issued_date": "2026-09-04",
+      "expires_date": "2027-09-03",
+      "scope": "Reinforced concrete core, columns and slabs, levels B3 to 34.",
+      "document": "CERT-STRUCT-2026-114",
+      "visibility": "public"
+    },
+    {
+      "id": "CERT-FIRE-2026-087",
+      "title": "Fire and life-safety systems compliance, stage 2",
+      "issuer": "northwind-fire-safety-institute",
+      "status": "issued",
+      "issued_date": "2026-07-18",
+      "expires_date": "2027-07-17",
+      "scope": "Stairwell pressurisation, standpipe risers and compartmentation, levels B3 to 20.",
+      "document": "CERT-FIRE-2026-087",
+      "visibility": "public"
+    },
+    {
+      "id": "CERT-GREEN-2026-031",
+      "title": "Verdant tier II provisional sustainability rating",
+      "issuer": "verdant-standards-council",
+      "status": "issued",
+      "issued_date": "2026-05-22",
+      "expires_date": "2028-05-21",
+      "scope": "Design-stage provisional rating. Becomes final only after as-built verification.",
+      "document": "CERT-GREEN-2026-031",
+      "visibility": "public"
+    },
+    {
+      "id": "CERT-ESCROW-2026-209",
+      "title": "Escrow account attestation, Q3 2026",
+      "issuer": "harborstone-escrow-trust",
+      "status": "issued",
+      "issued_date": "2026-10-05",
+      "expires_date": "2027-01-04",
+      "scope": "Balance and withdrawal activity on escrow account ESC-PVT-4471 for the quarter ended 2026-09-30.",
+      "document": "CERT-ESCROW-2026-209",
+      "visibility": "public"
+    },
+    {
+      "id": "CERT-MEP-2026-052",
+      "title": "MEP commissioning readiness assessment",
+      "issuer": "lumenfield-testing-laboratories",
+      "status": "pending",
+      "issued_date": null,
+      "expires_date": null,
+      "scope": "Draft assessment pending completion of MEP first fix. Not issued; not to be stated to a buyer as a held certificate.",
+      "document": "CERT-MEP-2026-052",
+      "visibility": "developer"
+    }
+  ],
+  "escrow": {
+    "account_ref": "ESC-PVT-4471",
+    "trustee": "harborstone-escrow-trust",
+    "latest_attestation": "CERT-ESCROW-2026-209",
+    "attested_balance_minor": 48213900000,
+    "attested_as_of": "2026-09-30"
+  },
+  "payment_schedules": [
+    {
+      "unit": "1204",
+      "type": "2-bedroom, level 12, sea aspect",
+      "buyer_ref": "BUYER-PV-1204",
+      "contract_date": "2025-08-14",
+      "total_price_minor": 245000000,
+      "paid_to_date_minor": 147000000,
+      "escrow_account_ref": "ESC-PVT-4471",
+      "document": "PS-1204",
+      "instalments": [
+        { "id": "IN-01", "label": "Booking deposit", "trigger": "contract", "percent": 10, "amount_minor": 24500000, "due_date": "2025-08-15", "status": "paid", "paid_date": "2025-08-14" },
+        { "id": "IN-02", "label": "On foundation completion", "trigger": "MS-02", "percent": 10, "amount_minor": 24500000, "due_date": "2025-12-30", "status": "paid", "paid_date": "2025-12-20" },
+        { "id": "IN-03", "label": "On podium slab", "trigger": "MS-04", "percent": 10, "amount_minor": 24500000, "due_date": "2026-05-15", "status": "paid", "paid_date": "2026-05-06" },
+        { "id": "IN-04", "label": "On frame to level 12", "trigger": "MS-05", "percent": 15, "amount_minor": 36750000, "due_date": "2026-06-30", "status": "paid", "paid_date": "2026-06-25" },
+        { "id": "IN-05", "label": "On topping out", "trigger": "MS-06", "percent": 15, "amount_minor": 36750000, "due_date": "2026-09-15", "status": "paid", "paid_date": "2026-09-10" },
+        { "id": "IN-06", "label": "On facade 60%", "trigger": "MS-07", "percent": 10, "amount_minor": 24500000, "due_date": "2026-12-10", "status": "scheduled", "paid_date": null },
+        { "id": "IN-07", "label": "On MEP first fix", "trigger": "MS-08", "percent": 10, "amount_minor": 24500000, "due_date": "2027-01-15", "status": "scheduled", "paid_date": null },
+        { "id": "IN-08", "label": "On handover", "trigger": "MS-10", "percent": 20, "amount_minor": 49000000, "due_date": "2027-09-15", "status": "scheduled", "paid_date": null }
+      ]
+    },
+    {
+      "unit": "0802",
+      "type": "1-bedroom, level 8, courtyard aspect",
+      "buyer_ref": "BUYER-PV-0802",
+      "contract_date": "2025-08-29",
+      "total_price_minor": 198000000,
+      "paid_to_date_minor": 89100000,
+      "escrow_account_ref": "ESC-PVT-4471",
+      "document": "PS-0802",
+      "instalments": [
+        { "id": "IN-01", "label": "Booking deposit", "trigger": "contract", "percent": 10, "amount_minor": 19800000, "due_date": "2025-09-01", "status": "paid", "paid_date": "2025-08-29" },
+        { "id": "IN-02", "label": "On foundation completion", "trigger": "MS-02", "percent": 10, "amount_minor": 19800000, "due_date": "2025-12-30", "status": "paid", "paid_date": "2025-12-28" },
+        { "id": "IN-03", "label": "On podium slab", "trigger": "MS-04", "percent": 10, "amount_minor": 19800000, "due_date": "2026-05-15", "status": "paid", "paid_date": "2026-05-11" },
+        { "id": "IN-04", "label": "On frame to level 12", "trigger": "MS-05", "percent": 15, "amount_minor": 29700000, "due_date": "2026-06-30", "status": "paid_late", "paid_date": "2026-07-04" },
+        { "id": "IN-05", "label": "On topping out", "trigger": "MS-06", "percent": 15, "amount_minor": 29700000, "due_date": "2026-09-15", "status": "overdue", "paid_date": null },
+        { "id": "IN-06", "label": "On facade 60%", "trigger": "MS-07", "percent": 10, "amount_minor": 19800000, "due_date": "2026-12-10", "status": "scheduled", "paid_date": null },
+        { "id": "IN-07", "label": "On MEP first fix", "trigger": "MS-08", "percent": 10, "amount_minor": 19800000, "due_date": "2027-01-15", "status": "scheduled", "paid_date": null },
+        { "id": "IN-08", "label": "On handover", "trigger": "MS-10", "percent": 20, "amount_minor": 39600000, "due_date": "2027-09-15", "status": "scheduled", "paid_date": null }
+      ]
+    },
+    {
+      "unit": "1510",
+      "type": "3-bedroom, level 15, sea aspect",
+      "buyer_ref": "BUYER-PV-1510",
+      "contract_date": "2025-07-18",
+      "total_price_minor": 312000000,
+      "paid_to_date_minor": 187200000,
+      "escrow_account_ref": "ESC-PVT-4471",
+      "document": "PS-1510",
+      "instalments": [
+        { "id": "IN-01", "label": "Booking deposit (60/40 plan)", "trigger": "contract", "percent": 20, "amount_minor": 62400000, "due_date": "2025-07-20", "status": "paid", "paid_date": "2025-07-18" },
+        { "id": "IN-02", "label": "On podium slab", "trigger": "MS-04", "percent": 20, "amount_minor": 62400000, "due_date": "2026-05-15", "status": "paid", "paid_date": "2026-05-02" },
+        { "id": "IN-03", "label": "On topping out", "trigger": "MS-06", "percent": 20, "amount_minor": 62400000, "due_date": "2026-09-15", "status": "paid", "paid_date": "2026-09-08" },
+        { "id": "IN-04", "label": "On handover", "trigger": "MS-10", "percent": 40, "amount_minor": 124800000, "due_date": "2027-09-15", "status": "scheduled", "paid_date": null }
+      ]
+    }
+  ],
+  "documents": [
+    { "doc_id": "PROJECT-RECORD", "title": "Palm Vista Tower project record", "path": "project.json", "issuer": "meridian-shoreline-developments", "visibility": "public" },
+    { "doc_id": "FC-01", "title": "Foundation completion record FC-01", "path": "docs/foundation-completion-record-FC-01.md", "issuer": "quillfield-consulting-engineers", "visibility": "public" },
+    { "doc_id": "SR-05", "title": "Site progress report SR-05 (structure topped out)", "path": "docs/site-progress-report-SR-05.md", "issuer": "quillfield-consulting-engineers", "visibility": "public" },
+    { "doc_id": "SR-06", "title": "Site progress report SR-06 (facade installation)", "path": "docs/site-progress-report-SR-06.md", "issuer": "quillfield-consulting-engineers", "visibility": "public" },
+    { "doc_id": "SR-07", "title": "Site progress report SR-07 (MEP first fix)", "path": "docs/site-progress-report-SR-07.md", "issuer": "quillfield-consulting-engineers", "visibility": "public" },
+    { "doc_id": "CERT-STRUCT-2026-114", "title": "Structural integrity verification certificate", "path": "docs/certificate-structural-integrity-CERT-STRUCT-2026-114.md", "issuer": "cedarline-assurance-bureau", "visibility": "public" },
+    { "doc_id": "CERT-FIRE-2026-087", "title": "Fire and life-safety compliance certificate, stage 2", "path": "docs/certificate-fire-life-safety-CERT-FIRE-2026-087.md", "issuer": "northwind-fire-safety-institute", "visibility": "public" },
+    { "doc_id": "CERT-GREEN-2026-031", "title": "Verdant tier II provisional sustainability rating", "path": "docs/certificate-sustainability-rating-CERT-GREEN-2026-031.md", "issuer": "verdant-standards-council", "visibility": "public" },
+    { "doc_id": "CERT-ESCROW-2026-209", "title": "Escrow account attestation Q3 2026", "path": "docs/certificate-escrow-attestation-CERT-ESCROW-2026-209.md", "issuer": "harborstone-escrow-trust", "visibility": "public" },
+    { "doc_id": "CERT-MEP-2026-052", "title": "MEP commissioning readiness assessment (draft, not issued)", "path": "docs/certificate-mep-commissioning-CERT-MEP-2026-052.md", "issuer": "lumenfield-testing-laboratories", "visibility": "developer" },
+    { "doc_id": "PS-1204", "title": "Payment schedule, unit 1204", "path": "docs/payment-schedule-unit-1204.md", "issuer": "meridian-shoreline-developments", "visibility": "unit:1204" },
+    { "doc_id": "PS-0802", "title": "Payment schedule, unit 0802", "path": "docs/payment-schedule-unit-0802.md", "issuer": "meridian-shoreline-developments", "visibility": "unit:0802" },
+    { "doc_id": "PS-1510", "title": "Payment schedule, unit 1510", "path": "docs/payment-schedule-unit-1510.md", "issuer": "meridian-shoreline-developments", "visibility": "unit:1510" },
+    { "doc_id": "CN-14", "title": "Internal contractor note CN-14 (delay analysis)", "path": "docs/contractor-note-CN-14.md", "issuer": "meridian-shoreline-developments", "visibility": "developer" }
+  ]
+}

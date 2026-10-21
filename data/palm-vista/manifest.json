@@ -1,0 +1,124 @@
+{
+  "watermark": "SYNTHETIC DEMO DATA",
+  "dataset": "palm-vista",
+  "algorithm": {
+    "hash": "sha256",
+    "signature": "ed25519",
+    "encoding": "lowercase-hex"
+  },
+  "signing_payload": "ed25519 over the concatenation of six length-prefixed UTF-8 fields, in this order: context \"ask-aunova/dataset-entry/v1\", dataset, doc_id, issuer, path, sha256. Each field is encoded as its length in bytes written in ASCII decimal, then a colon, then the field's UTF-8 bytes. There is no separator between fields and none at the end. Example for a one-field payload \"ab\": 2:ab",
+  "documents": [
+    {
+      "doc_id": "CERT-ESCROW-2026-209",
+      "path": "docs/certificate-escrow-attestation-CERT-ESCROW-2026-209.md",
+      "sha256": "69c5932f1ad1ac977d3274e5f04b0676b94b9ec16cb2b49057bd306e2537484c",
+      "issuer": "harborstone-escrow-trust",
+      "issuer_public_key": "59f253096ccf73f9ddc87583096c52b6f063eeae6595aa6989d5a7068944e891",
+      "signature": "e84462f041e33f680109e9b977c3ad6293ef3e1ae2bea9184f79dafc7db5dd0e8d32d8862350ad61a618b733e5382238030ac7b639b150c3f14a3dcf567e6107"
+    },
+    {
+      "doc_id": "CERT-FIRE-2026-087",
+      "path": "docs/certificate-fire-life-safety-CERT-FIRE-2026-087.md",
+      "sha256": "69a790e4d70c90b1853962d197296ab5ecde976cc2929db01d81fd72e8c543d5",
+      "issuer": "northwind-fire-safety-institute",
+      "issuer_public_key": "e0487ce8719240f3f21ccbc5b63163c62aa3254faa2e2d8726a3b672e884531b",
+      "signature": "5b380e30498de0772c0d1ec663c61d319599b73d23cb08e88858101aff19c09e20baabd1bdb54c286de60fcc5ea6296d051cefdcbeb81e1a4d96efa3c1e7cd0b"
+    },
+    {
+      "doc_id": "CERT-GREEN-2026-031",
+      "path": "docs/certificate-sustainability-rating-CERT-GREEN-2026-031.md",
+      "sha256": "fd701074021e5fb44a1f070af050342908d19adf591e1aaa13a42eb00791f8ed",
+      "issuer": "verdant-standards-council",
+      "issuer_public_key": "44f4e505ecbe294f9bffeeafef64b55d9b74e9e2159bb5b6d15bad6924520678",
+      "signature": "ba902d65355ed955a1c2b4534ba3f05026933bbba4175479c43104f9013e08d1afac50449888d63d722d86735fd34a6ac937066359f7fee89fcb3456aa6f9209"
+    },
+    {
+      "doc_id": "CERT-MEP-2026-052",
+      "path": "docs/certificate-mep-commissioning-CERT-MEP-2026-052.md",
+      "sha256": "26b89801f2f112679e5c7abc145f5ad4a9e8b17eb9dba4d289b270f23985cdc0",
+      "issuer": "lumenfield-testing-laboratories",
+      "issuer_public_key": "13e79a9c02d7c47d0a1350dc7123642a1affd43e474ee6486543e74bc49871b8",
+      "signature": "a54602ee0965c2c40445c9e301a53de601e43803cad028fc069f7cd847bd78c8a030f732a34884755689d3909dda831b215e079e23365ddf77d755e586715105"
+    },
+    {
+      "doc_id": "CERT-STRUCT-2026-114",
+      "path": "docs/certificate-structural-integrity-CERT-STRUCT-2026-114.md",
+      "sha256": "acb3a5e596b43d31be662a253659df7d60f1e3e69b94aeb459b3965bc0f196a3",
+      "issuer": "cedarline-assurance-bureau",
+      "issuer_public_key": "9bc632820fd8c6063f76684cd5a3a0ba88e685d5f0f4c2cba8776be5caf92930",
+      "signature": "b12bfccafde7ccc25c820a004a1004cb067375f5d0d347d0ae742fb1c45ded2036da7081be79b796fd5c7a4e4bf0f8247caea9f0ca77d11f0ac82ede13c8ed06"
+    },
+    {
+      "doc_id": "CN-14",
+      "path": "docs/contractor-note-CN-14.md",
+      "sha256": "5fd06a48e4275404a35b13b3ed05388fced36cafa97fd525bb0c2fabc2503b41",
+      "issuer": "meridian-shoreline-developments",
+      "issuer_public_key": "b81464195dfe7746d1464bc185bb85d988412fd5036745f786ca5b4c60c2f776",
+      "signature": "28cb4007f0d31f4c93c95e07f8b278473681a26903d9c531f01358ec173a43b19644b04662f763b92062476ff41794be5f64732369913413f068d639fb2e3f01"
+    },
+    {
+      "doc_id": "FC-01",
+      "path": "docs/foundation-completion-record-FC-01.md",
+      "sha256": "a6877f55d688f65870d423f4565f3d2098be8f774ccddf6b1c93f3056ad25285",
+      "issuer": "quillfield-consulting-engineers",
+      "issuer_public_key": "eebe99c26e05acf5aecd68afa656113428bafea577bd617288f2a0d686afddbb",
+      "signature": "ed26bf2b40e5c3c499232627b732a670087f9e5ec08f784a6d295cc89ee5434b8141cd8d92a1b17e9e2f4399cba3b1460eb6304be190543f19eae76fcd3a0601"
+    },
+    {
+      "doc_id": "PROJECT-RECORD",
+      "path": "project.json",
+      "sha256": "47ea1d2e1f019897b183063565ff03d776ad8a2ab4cf13a33120858cb892a821",
+      "issuer": "meridian-shoreline-developments",
+      "issuer_public_key": "b81464195dfe7746d1464bc185bb85d988412fd5036745f786ca5b4c60c2f776",
+      "signature": "07fdeaff95255a72150b2c335abecb45488a2ab4b0b4c33a83a9ea2073c7e49d7525c7651419b42ddba9018ef5ec3cdc0efdc7062358036ba9458df582cbe902"
+    },
+    {
+      "doc_id": "PS-0802",
+      "path": "docs/payment-schedule-unit-0802.md",
+      "sha256": "1ad00d4bc1a1cb2975f002933e472c87448d613cafc1eca32ce781fcf424c667",
+      "issuer": "meridian-shoreline-developments",
+      "issuer_public_key": "b81464195dfe7746d1464bc185bb85d988412fd5036745f786ca5b4c60c2f776",
+      "signature": "1925446c742d8940e6491c08b9e604b1f636d13e9c1bea7c0e900aefbfde098fd4b866b0b961684eaaa6713bb3347abbe2762516431f5a0806e1e4e5db9e4907"
+    },
+    {
+      "doc_id": "PS-1204",
+      "path": "docs/payment-schedule-unit-1204.md",
+      "sha256": "1c230859117a92b04c6029c371773d01502ed30b1e6935285b4c3d096394cf0a",
+      "issuer": "meridian-shoreline-developments",
+      "issuer_public_key": "b81464195dfe7746d1464bc185bb85d988412fd5036745f786ca5b4c60c2f776",
+      "signature": "44c77b827e6dad252a874812d223f020ac1425509e2403c505fef112b70c0b89d0ab3dc594653b75cbdd2e6237e4e17dad4ea865b06e0fa2ae8e174b085da500"
+    },
+    {
+      "doc_id": "PS-1510",
+      "path": "docs/payment-schedule-unit-1510.md",
+      "sha256": "68991cbfbfc0a20b483feafd1df4aae7ecccb4e47667b747b4ddb329111cbfce",
+      "issuer": "meridian-shoreline-developments",
+      "issuer_public_key": "b81464195dfe7746d1464bc185bb85d988412fd5036745f786ca5b4c60c2f776",
+      "signature": "d5a586d8fe361a8226db97d69554c7810b9adb982d1c704f9b4411179cdab22a65f81cd119088bec96bfc085b010351574360393c7ebe507e62140c3a442a002"
+    },
+    {
+      "doc_id": "SR-05",
+      "path": "docs/site-progress-report-SR-05.md",
+      "sha256": "c6cf68e343543b161b08a1d8fa62b80ee6a72d084df3e7d2d421825636da085e",
+      "issuer": "quillfield-consulting-engineers",
+      "issuer_public_key": "eebe99c26e05acf5aecd68afa656113428bafea577bd617288f2a0d686afddbb",
+      "signature": "625bc489223a7a319d8ae7de7df72d62e51fea41b47dde975a54d06bfcba2b9a0257f5e73c52843e129a530c49bf32556953f9c3988ceb9dc11daeff15cb9503"
+    },
+    {
+      "doc_id": "SR-06",
+      "path": "docs/site-progress-report-SR-06.md",
+      "sha256": "120b8698e5f4d67f17cb5fb92731531f53c9e99a0f35e1e397f0792ddcaa2195",
+      "issuer": "quillfield-consulting-engineers",
+      "issuer_public_key": "eebe99c26e05acf5aecd68afa656113428bafea577bd617288f2a0d686afddbb",
+      "signature": "b3b1aff1c9c94ebc1c716a77b3a2a2184065a29baaef28e2a93286f66a263f4cabc169c1d80d87731bc1c2dd5c9e9c7bfbbfd755f6c9c5d306a8409e995a7208"
+    },
+    {
+      "doc_id": "SR-07",
+      "path": "docs/site-progress-report-SR-07.md",
+      "sha256": "498b136587e1946f6762d2bd79a642ad71a5cbcd3fdd8f644daf0f414a794be7",
+      "issuer": "quillfield-consulting-engineers",
+      "issuer_public_key": "eebe99c26e05acf5aecd68afa656113428bafea577bd617288f2a0d686afddbb",
+      "signature": "51a42ff2e8e5b19bbc2f19a6973476ee7c11fcda78a7d715efbb80e6632d2915ef34f7c3912c91ad07805691a3a8fca4516ed9fd2e68c19b9212ebae1effbc0f"
+    }
+  ]
+}

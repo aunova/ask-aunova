@@ -1,0 +1,40 @@
+{
+  "watermark": "SYNTHETIC DEMO DATA",
+  "issuers": [
+    {
+      "id": "cedarline-assurance-bureau",
+      "name": "Cedarline Assurance Bureau",
+      "public_key": "9bc632820fd8c6063f76684cd5a3a0ba88e685d5f0f4c2cba8776be5caf92930"
+    },
+    {
+      "id": "harborstone-escrow-trust",
+      "name": "Harborstone Escrow Trust",
+      "public_key": "59f253096ccf73f9ddc87583096c52b6f063eeae6595aa6989d5a7068944e891"
+    },
+    {
+      "id": "lumenfield-testing-laboratories",
+      "name": "Lumenfield Testing Laboratories",
+      "public_key": "13e79a9c02d7c47d0a1350dc7123642a1affd43e474ee6486543e74bc49871b8"
+    },
+    {
+      "id": "meridian-shoreline-developments",
+      "name": "Meridian Shoreline Developments FZ-LLC",
+      "public_key": "b81464195dfe7746d1464bc185bb85d988412fd5036745f786ca5b4c60c2f776"
+    },
+    {
+      "id": "northwind-fire-safety-institute",
+      "name": "Northwind Fire Safety Institute",
+      "public_key": "e0487ce8719240f3f21ccbc5b63163c62aa3254faa2e2d8726a3b672e884531b"
+    },
+    {
+      "id": "quillfield-consulting-engineers",
+      "name": "Quillfield Consulting Engineers",
+      "public_key": "eebe99c26e05acf5aecd68afa656113428bafea577bd617288f2a0d686afddbb"
+    },
+    {
+      "id": "verdant-standards-council",
+      "name": "Verdant Standards Council",
+      "public_key": "44f4e505ecbe294f9bffeeafef64b55d9b74e9e2159bb5b6d15bad6924520678"
+    }
+  ]
+}
